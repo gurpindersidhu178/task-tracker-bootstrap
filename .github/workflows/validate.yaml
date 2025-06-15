@@ -1,0 +1,48 @@
+# .github/workflows/validate.yml
+name: ✨ Validate PR Workflow
+
+on:
+  pull_request:
+    branches: [ main, frontend-development, backend-development ]
+
+jobs:
+  validate-assignment:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: 📂 Checkout code
+      uses: actions/checkout@v3
+
+    - name: ✨ Set up Node.js
+      uses: actions/setup-node@v3
+      with:
+        node-version: '18.x'
+
+    - name: 💾 Install dependencies
+      run: |
+        cd frontend
+        npm install
+
+    - name: 🔧 Run lint check
+      run: |
+        cd frontend
+        npm run lint
+
+    - name: 🖥️ Validate backend assignment structure
+      run: |
+        for folder in backend/assignments/*; do
+          if [ ! -f "$folder/README.md" ]; then
+            echo "❌ Missing README.md in $folder"
+            exit 1
+          fi
+        done
+        echo "✅ All backend assignment folders contain README.md"
+
+    - name: 📃 Validate CONTRIBUTING file presence
+      run: |
+        if [ ! -f CONTRIBUTING.md ]; then
+          echo "❌ CONTRIBUTING.md is missing"
+          exit 1
+        else
+          echo "✅ CONTRIBUTING.md found"
+        fi
