@@ -1,0 +1,168 @@
+name: Assignment Distribution
+
+on:
+  workflow_dispatch:
+    inputs:
+      candidate_email:
+        description: 'Candidate email address'
+        required: true
+        type: string
+      candidate_name:
+        description: 'Candidate full name'
+        required: true
+        type: string
+      skillset:
+        description: 'Skillset assignment'
+        required: true
+        default: 'frontend-development'
+        type: choice
+        options:
+          - frontend-development
+          - backend-development
+          - data-science
+          - devops
+          - project-management
+      assignment:
+        description: 'Specific assignment'
+        required: true
+        default: 'task-tracker'
+        type: string
+      difficulty:
+        description: 'Assignment difficulty'
+        required: false
+        default: 'intermediate'
+        type: choice
+        options:
+          - beginner
+          - intermediate
+          - advanced
+      duration_days:
+        description: 'Assignment duration in days'
+        required: false
+        default: '7'
+        type: string
+
+jobs:
+  distribute:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          
+      - name: Setup Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.11'
+          
+      - name: Install dependencies
+        run: |
+          pip install requests jinja2
+          
+      - name: Create assignment branch
+        run: |
+          # Create candidate-specific branch
+          BRANCH_NAME="candidate/${{ github.event.inputs.candidate_email }}-${{ github.event.inputs.assignment }}"
+          git checkout -b "$BRANCH_NAME"
+          
+          # Create assignment using admin script
+          python admin/scripts/create_assignment.py \
+            --skillset "${{ github.event.inputs.skillset }}" \
+            --assignment-name "${{ github.event.inputs.assignment }}" \
+            --difficulty "${{ github.event.inputs.difficulty }}" \
+            --duration "${{ github.event.inputs.duration_days }}"
+            
+      - name: Push assignment branch
+        run: |
+          git config --local user.email "action@github.com"
+          git config --local user.name "GitHub Action"
+          git add .
+          git commit -m "🎯 Create assignment for ${{ github.event.inputs.candidate_name }} - ${{ github.event.inputs.assignment }}"
+          git push origin "candidate/${{ github.event.inputs.candidate_email }}-${{ github.event.inputs.assignment }}"
+          
+      - name: Generate assignment email
+        run: |
+          python -c "
+          import os
+          import json
+          from datetime import datetime, timedelta
+          
+          # Assignment details
+          assignment_data = {
+              'candidate_name': '${{ github.event.inputs.candidate_name }}',
+              'candidate_email': '${{ github.event.inputs.candidate_email }}',
+              'skillset': '${{ github.event.inputs.skillset }}',
+              'assignment': '${{ github.event.inputs.assignment }}',
+              'difficulty': '${{ github.event.inputs.difficulty }}',
+              'duration_days': ${{ github.event.inputs.duration_days }},
+              'branch_name': 'candidate/${{ github.event.inputs.candidate_email }}-${{ github.event.inputs.assignment }}',
+              'repository_url': '${{ github.repository }}',
+              'assignment_url': f'https://github.com/${{ github.repository }}/tree/candidate/${{ github.event.inputs.candidate_email }}-${{ github.event.inputs.assignment }}',
+              'deadline': (datetime.now() + timedelta(days=${{ github.event.inputs.duration_days }})).strftime('%B %d, %Y'),
+              'created_at': datetime.now().isoformat()
+          }
+          
+          # Save assignment data
+          with open('assignment_data.json', 'w') as f:
+              json.dump(assignment_data, f, indent=2)
+              
+          print('Assignment data saved to assignment_data.json')
+          "
+          
+      - name: Send assignment email
+        run: |
+          # This would integrate with your email service
+          # For now, we'll just create a summary
+          echo "Assignment created successfully!"
+          echo "Candidate: ${{ github.event.inputs.candidate_name }}"
+          echo "Email: ${{ github.event.inputs.candidate_email }}"
+          echo "Assignment: ${{ github.event.inputs.assignment }}"
+          echo "Branch: candidate/${{ github.event.inputs.candidate_email }}-${{ github.event.inputs.assignment }}"
+          echo "URL: https://github.com/${{ github.repository }}/tree/candidate/${{ github.event.inputs.candidate_email }}-${{ github.event.inputs.assignment }}"
+          
+      - name: Create assignment issue
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const issue = await github.rest.issues.create({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              title: `🎯 Assignment: ${context.payload.inputs.candidate_name} - ${context.payload.inputs.assignment}`,
+              body: `## Assignment Details
+            
+            **Candidate:** ${context.payload.inputs.candidate_name}
+            **Email:** ${context.payload.inputs.candidate_email}
+            **Skillset:** ${context.payload.inputs.skillset}
+            **Assignment:** ${context.payload.inputs.assignment}
+            **Difficulty:** ${context.payload.inputs.difficulty}
+            **Duration:** ${context.payload.inputs.duration_days} days
+            
+            ## Assignment URL
+            https://github.com/${context.repo.owner}/${context.repo.repo}/tree/candidate/${context.payload.inputs.candidate_email}-${context.payload.inputs.assignment}
+            
+            ## Status
+            - [ ] Assignment sent
+            - [ ] Candidate acknowledged
+            - [ ] Work in progress
+            - [ ] Submission received
+            - [ ] Evaluation completed
+            
+            ## Notes
+            Assignment created on ${new Date().toISOString()}
+            
+            ---
+            *This issue will be updated as the assignment progresses.*`,
+              labels: ['assignment', 'active', context.payload.inputs.skillset]
+            });
+            
+            console.log(`Created issue #${issue.data.number} for assignment tracking`);
+            
+      - name: Update assignment tracking
+        run: |
+          # Update the assignment tracking file
+          echo "Assignment distributed successfully!" > assignment_status.txt
+          echo "Date: $(date)" >> assignment_status.txt
+          echo "Candidate: ${{ github.event.inputs.candidate_name }}" >> assignment_status.txt
+          echo "Assignment: ${{ github.event.inputs.assignment }}" >> assignment_status.txt
+          echo "Branch: candidate/${{ github.event.inputs.candidate_email }}-${{ github.event.inputs.assignment }}" >> assignment_status.txt 

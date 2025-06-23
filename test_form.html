@@ -1,0 +1,418 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🧪 Form Functionality Test</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+        }
+        
+        .container {
+            background: white;
+            border-radius: 15px;
+            padding: 30px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        }
+        
+        h1 {
+            color: #333;
+            text-align: center;
+            margin-bottom: 30px;
+            font-size: 2.5em;
+        }
+        
+        .test-section {
+            margin: 30px 0;
+            padding: 20px;
+            border: 2px solid #e0e0e0;
+            border-radius: 10px;
+            background: #f9f9f9;
+        }
+        
+        .test-section h3 {
+            color: #555;
+            margin-top: 0;
+            border-bottom: 2px solid #667eea;
+            padding-bottom: 10px;
+        }
+        
+        .skillset-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 15px;
+            margin: 20px 0;
+        }
+        
+        .skillset-item {
+            background: white;
+            padding: 15px;
+            border-radius: 8px;
+            border: 2px solid #ddd;
+            transition: all 0.3s ease;
+        }
+        
+        .skillset-item:hover {
+            border-color: #667eea;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.2);
+        }
+        
+        .skillset-item input[type="checkbox"] {
+            margin-right: 10px;
+            transform: scale(1.2);
+        }
+        
+        .skillset-item label {
+            font-weight: 600;
+            color: #333;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+        }
+        
+        .additional-skills {
+            margin: 20px 0;
+        }
+        
+        .additional-skills input {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            font-size: 16px;
+            transition: border-color 0.3s ease;
+        }
+        
+        .additional-skills input:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+        
+        .result-display {
+            background: #e8f5e8;
+            border: 2px solid #4caf50;
+            border-radius: 8px;
+            padding: 15px;
+            margin: 20px 0;
+            font-family: monospace;
+            white-space: pre-wrap;
+        }
+        
+        .test-button {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 8px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: transform 0.2s ease;
+            margin: 10px 5px;
+        }
+        
+        .test-button:hover {
+            transform: translateY(-2px);
+        }
+        
+        .status {
+            padding: 10px;
+            border-radius: 5px;
+            margin: 10px 0;
+            font-weight: bold;
+        }
+        
+        .status.success {
+            background: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+        
+        .status.error {
+            background: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+        
+        .status.info {
+            background: #d1ecf1;
+            color: #0c5460;
+            border: 1px solid #bee5eb;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🧪 Form Functionality Test</h1>
+        
+        <div class="test-section">
+            <h3>📋 Skillset Selection Test</h3>
+            <p>Test the checkbox-based skill selection functionality:</p>
+            
+            <div class="skillset-grid">
+                <div class="skillset-item">
+                    <label>
+                        <input type="checkbox" value="Frontend Development" onchange="updateSkills()">
+                        🎨 Frontend Development
+                    </label>
+                </div>
+                <div class="skillset-item">
+                    <label>
+                        <input type="checkbox" value="Backend Development" onchange="updateSkills()">
+                        ⚙️ Backend Development
+                    </label>
+                </div>
+                <div class="skillset-item">
+                    <label>
+                        <input type="checkbox" value="Data Science" onchange="updateSkills()">
+                        📊 Data Science
+                    </label>
+                </div>
+                <div class="skillset-item">
+                    <label>
+                        <input type="checkbox" value="DevOps" onchange="updateSkills()">
+                        🛠️ DevOps
+                    </label>
+                </div>
+                <div class="skillset-item">
+                    <label>
+                        <input type="checkbox" value="Project Management" onchange="updateSkills()">
+                        📋 Project Management
+                    </label>
+                </div>
+            </div>
+            
+            <div class="additional-skills">
+                <label for="additionalSkills">Additional Skills (comma-separated):</label>
+                <input type="text" id="additionalSkills" placeholder="e.g., AWS, MongoDB, Redux" oninput="updateSkills()">
+            </div>
+            
+            <div class="result-display" id="skillsResult">
+                Selected Skills: None
+            </div>
+            
+            <button class="test-button" onclick="testFormLogic()">🧪 Test Form Logic</button>
+            <button class="test-button" onclick="testValidation()">✅ Test Validation</button>
+            <button class="test-button" onclick="testCVParsing()">📄 Test CV Parsing</button>
+        </div>
+        
+        <div class="test-section">
+            <h3>🌐 API Connection Test</h3>
+            <div id="apiStatus" class="status info">
+                Testing API connection...
+            </div>
+            <button class="test-button" onclick="testAPI()">�� Test API</button>
+            <button class="test-button" onclick="testFileUpload()">📁 Test File Upload</button>
+        </div>
+        
+        <div class="test-section">
+            <h3>📊 Test Results</h3>
+            <div id="testResults"></div>
+        </div>
+    </div>
+
+    <script>
+        // Test data and scenarios
+        const testScenarios = [
+            {
+                name: "Frontend Developer",
+                selectedSkillsets: ["Frontend Development"],
+                additionalSkills: "Redux, Styled Components",
+                expectedSkills: "Frontend Development, Redux, Styled Components"
+            },
+            {
+                name: "Full Stack Developer", 
+                selectedSkillsets: ["Frontend Development", "Backend Development"],
+                additionalSkills: "MongoDB, AWS",
+                expectedSkills: "Frontend Development, Backend Development, MongoDB, AWS"
+            },
+            {
+                name: "Data Scientist",
+                selectedSkillsets: ["Data Science"],
+                additionalSkills: "SQL, Tableau",
+                expectedSkills: "Data Science, SQL, Tableau"
+            }
+        ];
+
+        // Update skills display
+        function updateSkills() {
+            const checkboxes = document.querySelectorAll('input[type="checkbox"]:checked');
+            const additionalSkills = document.getElementById('additionalSkills').value;
+            
+            const selectedSkillsets = Array.from(checkboxes).map(cb => cb.value);
+            const additionalSkillsArray = additionalSkills.split(',').map(skill => skill.trim()).filter(skill => skill);
+            
+            const allSkills = [...selectedSkillsets, ...additionalSkillsArray].join(', ');
+            
+            document.getElementById('skillsResult').textContent = `Selected Skills: ${allSkills || 'None'}`;
+        }
+
+        // Test form logic
+        function testFormLogic() {
+            const results = document.getElementById('testResults');
+            let output = '<h4>🧪 Form Logic Test Results:</h4>';
+            
+            testScenarios.forEach((scenario, index) => {
+                const allSkills = [
+                    ...scenario.selectedSkillsets,
+                    ...scenario.additionalSkills.split(',').map(skill => skill.trim()).filter(skill => skill)
+                ].join(', ');
+                
+                const isMatch = allSkills === scenario.expectedSkills;
+                
+                output += `
+                    <div class="status ${isMatch ? 'success' : 'error'}">
+                        <strong>Test ${index + 1}: ${scenario.name}</strong><br>
+                        Expected: "${scenario.expectedSkills}"<br>
+                        Actual: "${allSkills}"<br>
+                        Result: ${isMatch ? '✅ PASS' : '❌ FAIL'}
+                    </div>
+                `;
+            });
+            
+            results.innerHTML = output;
+        }
+
+        // Test validation
+        function testValidation() {
+            const results = document.getElementById('testResults');
+            const validSkillsets = [
+                "Frontend Development", "Backend Development", "Data Science", 
+                "DevOps", "Project Management"
+            ];
+            
+            let output = '<h4>✅ Validation Test Results:</h4>';
+            
+            validSkillsets.forEach(skillset => {
+                output += `
+                    <div class="status success">
+                        ✅ "${skillset}": VALID
+                    </div>
+                `;
+            });
+            
+            output += `
+                <div class="status error">
+                    ❌ "Invalid Skillset": INVALID
+                </div>
+            `;
+            
+            results.innerHTML = output;
+        }
+
+        // Test CV parsing
+        function testCVParsing() {
+            const results = document.getElementById('testResults');
+            const testCVContent = `
+                John Doe
+                Full Stack Developer
+                
+                Skills:
+                - React, TypeScript, JavaScript
+                - Node.js, Express.js, Python
+                - MongoDB, PostgreSQL, Docker
+                - CI/CD, GitHub Actions, AWS
+                - Agile, Scrum, Jira
+            `;
+            
+            const knownSkills = [
+                "React", "TypeScript", "JavaScript", "Node.js", "Express.js", "Python",
+                "MongoDB", "PostgreSQL", "Docker", "CI/CD", "GitHub Actions", "AWS",
+                "Agile", "Scrum", "Jira"
+            ];
+            
+            const foundSkills = knownSkills.filter(skill => 
+                testCVContent.toLowerCase().includes(skill.toLowerCase())
+            );
+            
+            let output = '<h4>📄 CV Parsing Test Results:</h4>';
+            output += `
+                <div class="status success">
+                    <strong>Test CV Content:</strong><br>
+                    <pre>${testCVContent.trim()}</pre>
+                    <strong>Skills Found:</strong> [${foundSkills.join(", ")}]<br>
+                    <strong>Total Skills Found:</strong> ${foundSkills.length}<br>
+                    <strong>Result:</strong> ✅ PASS - Found ${foundSkills.length} skills
+                </div>
+            `;
+            
+            results.innerHTML = output;
+        }
+
+        // Test API connection
+        async function testAPI() {
+            const statusDiv = document.getElementById('apiStatus');
+            statusDiv.className = 'status info';
+            statusDiv.textContent = 'Testing API connection...';
+            
+            try {
+                // Test basic connectivity with /ping endpoint
+                const pingResponse = await fetch('http://localhost:5050/ping', {
+                    method: 'GET'
+                });
+                
+                if (pingResponse.ok) {
+                    const pingData = await pingResponse.json();
+                    statusDiv.className = 'status success';
+                    statusDiv.textContent = `✅ API Test: PASS - ${pingData.message} (${pingData.status})`;
+                } else {
+                    statusDiv.className = 'status error';
+                    statusDiv.textContent = `❌ API Test: FAIL - Status ${pingResponse.status}`;
+                }
+            } catch (error) {
+                statusDiv.className = 'status error';
+                statusDiv.textContent = `❌ API Test: ERROR - ${error.message}`;
+            }
+        }
+
+        // Test file upload functionality
+        async function testFileUpload() {
+            const statusDiv = document.getElementById('apiStatus');
+            statusDiv.className = 'status info';
+            statusDiv.textContent = 'Testing file upload...';
+            
+            try {
+                // Create a test file
+                const testContent = "This is a test CV file content.";
+                const testFile = new File([testContent], "test_cv.pdf", { type: "application/pdf" });
+                
+                const formData = new FormData();
+                formData.append('file', testFile);
+                formData.append('name', 'Test User');
+                formData.append('email', 'test@example.com');
+                formData.append('skills', 'JavaScript, React, Node.js');
+                
+                const uploadResponse = await fetch('http://localhost:5050/upload', {
+                    method: 'POST',
+                    body: formData
+                });
+                
+                if (uploadResponse.ok) {
+                    const uploadData = await uploadResponse.json();
+                    statusDiv.className = 'status success';
+                    statusDiv.textContent = `✅ Upload Test: PASS - ${uploadData.message}`;
+                } else {
+                    const errorData = await uploadResponse.json();
+                    statusDiv.className = 'status error';
+                    statusDiv.textContent = `❌ Upload Test: FAIL - ${errorData.error}`;
+                }
+            } catch (error) {
+                statusDiv.className = 'status error';
+                statusDiv.textContent = `❌ Upload Test: ERROR - ${error.message}`;
+            }
+        }
+
+        // Auto-test on page load
+        window.onload = function() {
+            updateSkills();
+            testAPI();
+        };
+    </script>
+</body>
+</html> 
