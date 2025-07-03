@@ -1,0 +1,44 @@
+name: Assignment System CI
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'parse_and_assign_api/**'
+      - 'logbiz-assignments/**'
+      - '.github/workflows/**'
+  pull_request:
+    branches: [main]
+    paths:
+      - 'parse_and_assign_api/**'
+      - 'logbiz-assignments/**'
+      - '.github/workflows/**'
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Install dependencies
+        run: |
+          cd parse_and_assign_api
+          if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
+      - name: Run all tests
+        run: |
+          cd parse_and_assign_api
+          for f in test_*.py; do echo "Running $f"; python3 "$f" || exit 1; done
+      - name: Show test summary
+        if: always()
+        run: echo "All assignment system tests completed."
+      - name: Cache pip
+        uses: actions/cache@v4
+        with:
+          path: ~/.cache/pip
+          key: ${{ runner.os }}-pip-${{ hashFiles('**/requirements.txt') }}
+          restore-keys: |
+            ${{ runner.os }}-pip- 
