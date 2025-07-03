@@ -1,12 +1,76 @@
-# 🎯 Logbiz Assignment Module
-## Fresher Skillset Onboarding & Evaluation System
+# 🎯 Logbiz Assignments Repository
 
-Welcome to our comprehensive assignment module for evaluating and developing fresher skillsets. This system provides automated assignment distribution, evaluation workflows, and progress tracking.
+Welcome to the Logbiz Group assignment repository! This repository contains skill-based assignments for freshers and candidates.
+
+## 📋 Available Assignments
+
+### 🎨 Frontend Development
+- **Branch**: `frontend-development`
+- **Assignment**: Task Tracker Application
+- **Duration**: 7 days
+- **Difficulty**: Intermediate
+
+### ⚙️ Backend Development  
+- **Branch**: `backend-development`
+- **Assignment**: API Gateway & Microservices
+- **Duration**: 10 days
+- **Difficulty**: Advanced
+
+### 📊 Data Science
+- **Branch**: `data-science`
+- **Assignment**: ML Pipeline & Analytics
+- **Duration**: 8 days
+- **Difficulty**: Intermediate
+
+### 🛠️ DevOps
+- **Branch**: `devops`
+- **Assignment**: CI/CD Pipeline & Infrastructure
+- **Duration**: 12 days
+- **Difficulty**: Advanced
+
+### 📋 Project Management
+- **Branch**: `project-management`
+- **Assignment**: Agile Tools & Process Management
+- **Duration**: 5 days
+- **Difficulty**: Beginner
+
+### 🔄 Agile/Scrum
+- **Branch**: `agile`
+- **Assignment**: Agile Project Management
+- **Duration**: 5 days
+- **Difficulty**: Beginner
+
+## 🚀 Getting Started
+
+1. **Check your assignment email** for your specific branch
+2. **Clone this repository**: `git clone https://github.com/gurpindersidhu178/logbiz-assignments.git`
+3. **Switch to your branch**: `git checkout <your-assignment-branch>`
+4. **Read the TASKS.md file** in your branch for detailed instructions
+5. **Complete the assignment** following the requirements
+6. **Submit your work** before the deadline
+
+## 📤 Submission Guidelines
+
+- Fork this repository to your GitHub account
+- Complete all requirements in the TASKS.md file
+- Create a pull request with your completed work
+- Include all deliverables as specified in the assignment
+
+## 🆘 Support
+
+- **Technical Issues**: Create a GitHub issue
+- **Assignment Questions**: Email hr@logbizgroup.com
+- **Urgent Issues**: Contact your assigned mentor
 
 ---
 
-## 📚 Available Skillsets
+*Built with ❤️ by the Logbiz Tech Team*
 
+---
+
+**📅 Last Updated**: June 20, 2025  
+**🔄 Version**: 1.0  
+**📧 Support**: hr@logbizgroup.com 
 ### 🎨 **Frontend Development**
 - **Task Tracker**: Full-stack React + Express application (Intermediate, 7 days)
 - **Portfolio Website**: Modern responsive portfolio (Beginner, 5 days) *[Coming Soon]*

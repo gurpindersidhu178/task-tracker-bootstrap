@@ -40,6 +40,7 @@
   - [ ] Blue-green or canary deployment
   - [ ] Rollback mechanisms
   - [ ] Environment-specific configurations
+  - [ ] **Notification Service Deployment**: Deploy email/SMS notification microservice
 - [ ] **Infrastructure (15 points)**:
   - [ ] Infrastructure as code (Terraform/CloudFormation)
   - [ ] Container orchestration setup

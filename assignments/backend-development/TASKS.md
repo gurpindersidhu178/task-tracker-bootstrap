@@ -40,6 +40,8 @@
   - [ ] Implement service discovery
   - [ ] Add health checks and monitoring
   - [ ] Implement circuit breaker pattern
+  - [ ] **User Profile Service**: Create profile management API with CRUD operations
+  - [ ] **Notification Service**: Implement email/SMS notification microservice
 - [ ] **Integration (15 points)**:
   - [ ] Docker containerization
   - [ ] Kubernetes deployment manifests

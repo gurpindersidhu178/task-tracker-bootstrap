@@ -40,6 +40,8 @@
   - [ ] Add filtering dropdown (by priority, status)
   - [ ] Add task archiving functionality
   - [ ] Implement responsive design for mobile/tablet
+  - [ ] **User Profile Page**: Create profile page with edit functionality
+  - [ ] **Dashboard Components**: Build dashboard layout with widgets
 - [ ] **Integration (15 points)**:
   - [ ] Proper frontend-backend communication
   - [ ] Real-time updates using WebSocket or polling

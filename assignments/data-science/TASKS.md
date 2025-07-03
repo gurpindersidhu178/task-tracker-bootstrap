@@ -40,6 +40,8 @@
   - [ ] Implement cross-validation
   - [ ] Model evaluation and comparison
   - [ ] Hyperparameter tuning
+  - [ ] **Analytics Pipeline**: Set up analytics pipeline for data processing
+  - [ ] **Basic Reporting**: Implement basic reporting and visualization
 - [ ] **Pipeline Automation (15 points)**:
   - [ ] Automated training pipeline
   - [ ] Model versioning and tracking
